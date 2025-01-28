@@ -41,7 +41,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
     // return res.json(data);
     // Send request to mlURL/api/compare-images
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/compare-images/",
+      "https://livelink.pythonanywhere.com/api/compare-images/",
       data
     );
 
