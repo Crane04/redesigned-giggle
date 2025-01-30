@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "lifelink",
+    "slug": "lifelink",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/pulse.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/pulse.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F3E5F5"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/pulse.png",
+        "backgroundColor": "#F3E5F5"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
+  }
+}

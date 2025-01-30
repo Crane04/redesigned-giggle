@@ -1,0 +1,74 @@
+post http://localhost:3000/hospital/create
+Content-Type: application/json
+
+{
+    "name": "lasu hospital",
+    "hospitalType": "Public",
+    "address": "123 Main St, City, State, Zip",
+    "contactEmail": "encrane04@example.com"
+}
+###
+post https://lifelink-ordc.onrender.com/hospital/verify
+Content-Type: application/json
+
+{"regId": "I5SVZ1Q"}
+###
+post https://lifelink-ordc.onrender.com/hospital/login
+Content-Type: application/json
+
+{"regId": "EL71S0Q"}
+
+###
+ http://localhost:3000/patients
+Content-Type: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3NwaXRhbElkIjoiNjczZTY4YmI4OGI5ZjRlOGYzNTE3NTQ2IiwicmVnSWQiOiJFTDcxUzBRIiwiaWF0IjoxNzMyMjc4NjA5LCJleHAiOjk5OTk5MjczMjI3ODYwOX0._7W_4OkXLJRRf6RTL7QYrv45l8yHs_Cu1O16ybqFxBw
+
+{
+    "fullName": "Mayowa",
+    "dob": "1990-01-01",
+    "address": "456 Elm St, City, State, Zip",
+    "email": "johndoe@example.com",
+    "phoneNumber": "123-456-7890",
+    "gender": "Male",
+    "genotype": "AA",
+    "bloodGroup": "A+",
+    "dateOfBirth": "2020-04-12"
+}
+###
+get https://lifelink-ordc.onrender.com/hospital
+###
+
+put https://lifelink-ordc.onrender.com/patients/update/673f13818d91fc3b854d559c
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3NwaXRhbElkIjoiNjczZTY4YmI4OGI5ZjRlOGYzNTE3NTQ2IiwicmVnSWQiOiJFTDcxUzBRIiwiaWF0IjoxNzMyMjc4NjA5LCJleHAiOjk5OTk5MjczMjI3ODYwOX0._7W_4OkXLJRRf6RTL7QYrv45l8yHs_Cu1O16ybqFxBw
+
+{
+    "fullName": "Blessing Adeekunle",
+    "dob": "2020-01-01",
+    "address": "456 Elm St, City, State, Zip"
+}
+###
+
+GET https://lifelink-ordc.onrender.com/patients/search?fullName=m&phoneNumber=12345&hospitalName=general
+
+###
+
+
+post http://localhost:3000/patients/signin
+Content-Type: application/json
+
+{
+    "username": "Crane04",
+    "password": "123456",
+    "address":"Lagos",
+    "gender":"Male",
+    "fullName":"Mayowa Yusuf",
+    "phoneNumber":"09114081137",
+    "dateOfBirth": "2020-04-12"
+}
+###
+post http://localhost:3000/patients/update-user-by-user
+Content-Type: multipart/form-data
+
+###
+http://localhost:3000/patients/get-user

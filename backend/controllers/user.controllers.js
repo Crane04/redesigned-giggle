@@ -36,14 +36,19 @@ exports.createUser = async (req, res) => {
       password: "Password is required.",
     };
 
+    const user = await User.findOne({ username });
+    console.log(user)
+    if (user) {
+      return res.status(400).json({
+        message: "User with this username already exists",
+      });
+    }
     const missingFields = Object.entries(requiredFields)
       .filter(([key]) => !req.body[key])
       .map(([, message]) => message);
 
     if (missingFields.length > 0) {
-      return res
-        .status(400)
-        .json({ message: "Validation Error", errors: missingFields });
+      return res.status(400).json({ message: missingFields });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     // Initialize the new user object
@@ -65,6 +70,7 @@ exports.createUser = async (req, res) => {
       user: newUser,
     });
   } catch (error) {
+    console.error(error);
     res
       .status(500)
       .json({ message: "Error creating user", error: error.message });
@@ -97,6 +103,98 @@ exports.signin = async (req, res) => {
   }
 };
 
+exports.getUser = async (req, res) => {
+  try {
+    // Get the Authorization header
+    const authHeader = req.headers.Authorization || req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No token provided" });
+    }
+
+    // Extract the token
+    const token = authHeader.split(" ")[1];
+
+    // Verify and decode the token
+    const decoded = jwt.verify(token, SECRET_KEY); // Use your JWT secret
+
+    // Extract user ID from the decoded payload
+    const userId = decoded.userId;
+
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return the user data
+    res.status(200).json({
+      message: "User retrieved successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving user",
+      error: error.message,
+    });
+  }
+};
+exports.updateUserByUser = async (req, res) => {
+  console.log(req.body);
+  try {
+    const updateData = req.body; // Get data to update from request body
+
+    // Check if the user is authenticated and get their hospital
+    const authHeader = req.headers.Authorization || req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No token provided" });
+    }
+
+    // Extract the token
+    const token = authHeader.split(" ")[1];
+
+    // Verify and decode the token
+    const decoded = jwt.verify(token, SECRET_KEY); // Use your JWT secret
+
+    // Extract user ID from the decoded payload
+    const userId = decoded.userId;
+
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Add the current hospital to the previousHospitals array (if not already added)
+
+    // Update the user details
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { ...updateData },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating user",
+      error: error.message,
+    });
+  }
+};
+
 exports.uploadImage = async (req, res) => {
   let image = null;
   const token = req.headers.authorization?.split(" ")[1];
@@ -112,7 +210,7 @@ exports.uploadImage = async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Invalid user authorization." });
   }
-  console.log(req.file)
+  console.log(req.file);
   if (req.file) {
     console.log("theres a file");
     try {
@@ -131,7 +229,9 @@ exports.uploadImage = async (req, res) => {
 
   await user.save();
 
-  return res.status(200).json({ message: "User updated successfully", user });
+  return res
+    .status(200)
+    .json({ message: "User updated successfully", user, success: true });
 };
 exports.getAllUsers = async (req, res) => {
   try {
